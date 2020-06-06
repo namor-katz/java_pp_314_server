@@ -1,2 +1,3 @@
 # java_pp_314_server
-This training repo
+This training repo contains server, return data use resp-api
+

@@ -60,7 +60,7 @@ function ajaxSave() {
     }).always(function () {
         // modal.modal("hide");
         // location.reload(true);
-        let url2 = "http://localhost:8081/admin/list2";
+        let url2 = "http://localhost:8081/admin/list";
         $(location).attr('href',url2);
     });
 }
