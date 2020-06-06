@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/" lang="en">
+<head>
+    <head th:replace="fragments/header :: common_header(~{::title}, ~{})">
+    <meta charset="UTF-8">
+    <title>User Page Ajax</title>
+</head>
+<body>
+<!-- this header of fragments -->
+<header th:insert="fragments/header :: header (${user.roles}, ${user.email})"></header>
+<div>
+    <p th:text="${user.id}"  id="uuid" hidden></p>
+</div>
+
+<div id="result"></div>
+<!-- огромная строка -контейнер -->
+<div class="row">
+
+    <div class="col-2 container">       <!-- left container -->
+        <div class="col-12  text-white rounded bg-primary">User</div>
+    </div>
+
+    <div class="col-10 container bg-light pb-5">
+        <div class="row">
+            <div class="col-12 h2">User information-page</div>
+        </div>
+
+        <div class="row">
+            <div class="col-11 bg-light h3 m-0 border-right border-left border-top">
+                About user
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-11 bg-white m-0 p-0 border">
+                <table class="table table-striped">
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>email</th>
+                        <th>maxWeigth</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+<!--                    <tr th:object="${user}">-->
+                        <td id="id"></td>
+                        <td id="username"></td>
+                        <td id="email"></td>
+                        <td id="maxweight"></td>
+<!--                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    let idValue = $('#uuid').text();
+
+    $.get("http://localhost:8081/api/v1/user/info/" + idValue).done(function (data) {
+        $('#username').append(data.username)
+        $("#id").append(data.id)
+        $("#email").append(data.email)
+        $("#maxweight").append(data.maxweight)
+    });
+});
+</script>
+<script type="text/javascript" th:src="@{/js/userAjax.js}"></script>
+</body>
+</html>

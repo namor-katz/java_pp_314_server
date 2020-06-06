@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" content="text/html" http-equiv="Content-Type">
+    <title>Admin panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <style>
+        .text-secondary a:hover,
+        .text-white a:active,
+        .text-white a:visited
+    {
+        color: gray;
+    }
+    caption {
+        caption-side: top; /* Заголовок принудительно уносим над таблицей */
+    }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <header class="row text-white bg-dark">
+        <div class="col-md-9  text-white h2 text-left bg-dark" th:each="role : ${you.roles}" th:text="${you.email} + ' with roles: ' + ${role.authority}">with roles: ADMIN, USER</div>
+        <div class="col-md-3 text-right bg-dark align-text-bottom my-auto"><a href="/logout">Logout</a></div>
+        <!--  гиперссылка не переезжает вниз, не позиционируется по центру вертикально. игнорирует свойства выставляемые в контейнере -->
+        <!-- не работает выставление цвета текста для гиперссылки -->
+        <!-- нет фавикона из коропки, не добавляется свой по этой доке https://www.baeldung.com/spring-boot-favicon -->
+    </header>
+</div>
+
+<div class="row">
+
+    <div class="col-2 container">		<!-- левый контейнер -->
+        <div class="col-12"></div>
+        <div class="col-12 bg-primary text-white rounded">Admin</div>
+        <div class="col-12">User</div>
+    </div>
+
+    <!-- base panel -->
+    <div class="col-10 container bg-light pb-5">
+        <div class="row">
+            <div class="col-8 h2">Admin panel</div>
+        </div>
+
+        <div class="row mb-0 ml-0">
+            <div class="col-1 border bg-white">
+                Users table
+            </div>
+            <div class="col-2 text-left">
+                <a href="/registration">New User</a>
+            </div>
+        </div>
+
+        <div class="row ml-0 mb-0"> <!-- было lang= и всё работало точно так же О_О-->
+            <div class="col-11 border-top border-right border-left h2 mb-0">All Users</div>
+
+<!--            <div class="row mt-0">-->
+                <div class="col-11  bg-white border">
+
+                    <table class="table table-striped">
+                        <!--                    <caption class="h2 mb-0 bg-light border ml-0">&nbsp; All users</caption>-->
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>MaxWeight</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+
+                        <thbody>
+                            <tr>
+                            <tr th:each="user : ${list}">
+                                <td th:text="${user.id}">1</td>
+                                <td th:text="${user.username}">admin</td>
+                                <td th:each="role : ${user.roles}" th:text="${role.authority}">THis may role...</td>
+                                <td th:text="${user.email}">a@mail.ru</td>
+                                <td th:text="${user.maxweight}">75</td>
+                            <!-- start big block -->
+<!-- тут начало едит-->         <td>
+                                    <button class="btn btn-primary" data-toggle="modal" th:href="'#modall' + ${user.id}">
+                                        Edit
+                                    </button>
+                                    <div class="modal fade" th:id="'modall' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">Edit user</h4>
+                                            </div>
+                                            <!-- end modal-header -->
+                                            <div class="modal-body">
+                                                <div class="new-user">
+                                                    <form th:action="@{/admin/edit}" th:method="post">
+                                                        <div class="form-group">
+                                                            <label for="id">id</label>
+                                                            <input type="text" class="form-control" id="id" name="id" th:value="${user.id}" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="editUsername">Имя</label>
+                                                            <input type="text" class="form-control" id="editUsername" name="username" th:value="${user.username}" required autofocus>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="editEmail">Email</label>
+                                                            <input type="text" class="form-control" id="editEmail" name="email" th:value="${user.email}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="editMaxWeight">MaxWeight</label>
+                                                            <input type="text" class="form-control" id="editMaxWeight" name="maxweight" th:value="${user.maxweight}" required>
+                                                        </div>
+                                                        <!-- футер -->
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary" th:method="post">Save</button>
+                                                        </div>
+
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- finall big block -->
+<!--                                    <a class="btn btn-danger" th:href="@{/admin/delete(id=${user.id})}" role="button">Delete</a>-->
+
+                                    <button class="btn btn-danger" data-toggle="modal" th:href="'#modall2' + ${user.id}">
+                                       Delete!
+                                    </button>
+
+                                    <div class="modal fade" th:id="'modall2' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel2">Delete user</h4>
+                                                </div>
+                                                <!-- end modal-header -->
+                                                <div class="modal-body">
+                                                    <div class="new-user">
+                                                        <form th:action="@{/admin/delete}" th:method="get">
+                                                            <div class="form-group">
+                                                                <label for="id">id</label>
+                                                                <input type="text" class="form-control" id="id2" name="id" th:value="${user.id}" readonly>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="editUsername">Имя</label>
+                                                                <input type="text" class="form-control" id="editUsername2" name="username" th:value="${user.username}" required autofocus readonly>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="editEmail">Email</label>
+                                                                <input type="text" class="form-control" id="editEmail2" name="email" th:value="${user.email}" required readonly>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="editMaxWeight">MaxWeight</label>
+                                                                <input type="text" class="form-control" id="editMaxWeight2" name="maxweight" th:value="${user.maxweight}" required readonly>
+                                                            </div>
+                                                            <!-- футер -->
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger" th:method="get">Delete</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            <td>
+                            </tr>
+                        </thbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
