@@ -32,11 +32,9 @@ public class UserRestController {
 
     @GetMapping(value = "user/info/{id}")
     public User getUserInfo(@PathVariable String id) {
-        System.out.println("в меня пришёл запрос! " + id);
-        String id0 = id.replace("id", "");
         Long id1;
         try {
-            id1 = Long.parseLong(id0);
+            id1 = Long.parseLong(id);
         }
         catch (Error e) {
             id1 = 1L;
@@ -44,6 +42,12 @@ public class UserRestController {
         User user = userService.findUserById(id1);
         user.setPassword(null);
         user.setPasswordConfirm(null);
+        return user;
+    }
+
+    @GetMapping(value = "user/info2/{name}")
+    public User getUserByName(@PathVariable String username) {
+        User user = (User) userService.loadUserByUsername(username);
         return user;
     }
 

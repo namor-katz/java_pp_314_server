@@ -24,14 +24,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().and()
                 .csrf()
                 .disable()
-//                .headers().frameOptions().sameOrigin().disable()
-//                .headers().frameOptions().sameOrigin().and().hsts().disable();
                 .authorizeRequests()
 //                .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/api/v1/**").permitAll()
+                .antMatchers("/api/v1/**", "/api/v1/user/info/**/*").permitAll()  //!! сменить на только для одминов!
                 .antMatchers("/", "/login", "/static/**/*").permitAll()
                 .antMatchers("/admin/**", "/registration").hasRole("ADMIN")
                 .antMatchers("/user").hasRole("USER")

@@ -1,3 +1,9 @@
 # java_pp_314_server
-This training repo contains server, return data use resp-api
 
+This is server from RESTful server.
+Ecosystem:
+> - Spring Boot
+> - jquery
+> - bootstrap
+
+address client repo: https://github.com/namor-katz/java_pp_314_client.git
