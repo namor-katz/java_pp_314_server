@@ -29,18 +29,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
 //                .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/api/v1/**", "/api/v1/user/info/**/*").permitAll()  //!! сменить на только для одминов!
+                .antMatchers("/api/v1/**", "/api/v1/user/info/**/*").hasRole("ADMIN")  //!! сменить на только для одминов!
                 .antMatchers("/", "/login", "/static/**/*").permitAll()
                 .antMatchers("/admin/**", "/registration").hasRole("ADMIN")
                 .antMatchers("/user").hasRole("USER")
                 //use authentification
         .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .successHandler(new LoginSuccessHandler())
-                .permitAll();
-
+//                .formLogin()
+//                .loginPage("/login")
+//                .successHandler(new LoginSuccessHandler())
+//                .permitAll();
+                    .httpBasic();   //this basic authentication from client app
 //        httpSecurity.ignoring().antMatchers("/resources/**/*", "/resources/**", "/resources/css/**");
 
 

@@ -46,8 +46,8 @@ public class UserRestController {
     }
 
     @GetMapping(value = "user/info2/{name}")
-    public User getUserByName(@PathVariable String username) {
-        User user = (User) userService.loadUserByUsername(username);
+    public User getUserByName(@PathVariable String name) {
+        User user = (User) userService.loadUserByUsername(name);
         return user;
     }
 
@@ -78,7 +78,7 @@ public class UserRestController {
     @ApiOperation(value = "Update exixting user", code = 202, response = User.class)
     @ApiResponses(value = {@ApiResponse(code = 202, message = "Update accepted")})
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
-        System.out.println(user.getId() + " " + user.getUsername() + " " + user.getEmail() + " вес " + user.getMaxweight());
+//        System.out.println(user.getId() + " " + user.getUsername() + " " + user.getEmail() + " вес " + user.getMaxweight());
         Long id0 = Long.parseLong(id);
         User userOfDb = userService.findUserById(id0);
         Set<Role> roles  = userOfDb.getRoles();
